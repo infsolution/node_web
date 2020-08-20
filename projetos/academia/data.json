@@ -1,0 +1,13 @@
+{
+  "instructors": [
+    {
+      "avatar_url": "https://www.cambina.com",
+      "name": "Cardoso",
+      "birth": 1031356800000,
+      "gender": "M",
+      "services": "Pilates, musculaçao",
+      "created_at": 1597868311184,
+      "id": 1
+    }
+  ]
+}
