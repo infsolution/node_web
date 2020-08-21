@@ -1,5 +1,9 @@
 const fs = require('fs')
 const data = require('./data.json')
+const { age, date } = require('./utils')
+
+
+
 exports.post = function(req, res){
 	const keys = Object.keys(req.body)
 	for(key of keys){
@@ -11,7 +15,7 @@ exports.post = function(req, res){
 
 	birth = Date.parse(birth)
 	const created_at = Date.now()
-	const id = Number(data.instructors.length + 1)
+	const id = Number(data.instructors.length + 1 )
 
 	data.instructors.push({
 		id,
@@ -36,22 +40,26 @@ exports.show = function(req, res){
 		return id == instructor.id
 	})
 	if (!foundInstructor) return res.send("Instructor not found")
-	function age(timestamp){
-		const today = new Date()
-		const birthDate = new Date(timestamp)
-		let age = today.getFullYear() - birthDate.getFullYear()
-		const month = today.getMonth() - birthDate.getMonth()
-		if(month < 0 || month == 0 && today.getDate() < birthDate.getDate()){
-			age = age - 1
-		}
-		return age
-	}
 	const instructor = {
 		...foundInstructor,
 		age:age(foundInstructor.birth),
 		services:foundInstructor.services.split(","),
-		created_at:"",
+		created: new Intl.DateTimeFormat('pt-BR').format(foundInstructor.created_at)
 	}
 	return res.render("instructors/show",{instructor})
+}
+
+exports.edit = function(req, res){
+	const {id} = req.params
+	const foundInstructor = data.instructors.find(function(instructor){
+		return id == instructor.id
+	})
+	if(!foundInstructor) return res.send("Instructor not found")
+
+	const instructor = {
+		...foundInstructor,
+		birth: date(foundInstructor.birth)
+	}
+	return res.render("instructors/edit",{instructor})
 
 }
